@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Adventures of an Engineer - Чтение</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+    <style>
+        .spinner {
+            border: 3px solid #2d2d2d;
+            border-radius: 50%;
+            border-top: 3px solid #4cc9f0;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4cc9f0;
+            color: #121212;
+            padding: 15px 25px;
+            border-radius: 8px;
+            z-index: 10000;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        
+        .book-text h3 {
+            color: #4cc9f0;
+            margin: 30px 0 15px;
+            font-size: 1.4rem;
+            border-bottom: 1px solid #2d2d2d;
+            padding-bottom: 10px;
+        }
+        
+        .book-text p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            text-align: justify;
+        }
+        
+        .book-text em {
+            font-style: italic;
+            color: #a0a0a0;
+        }
+        
+        .book-text strong {
+            color: #e0e0e0;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="index.html" class="logo">
+                    <div class="logo-img">⚙️</div>
+                    <span class="logo-text">The Adventures of an Engineer</span>
+                </a>
+                
+                <!-- Навигация -->
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
+                        <li class="nav-item"><a href="about-book.html" class="nav-link">О книге</a></li>
+                        <li class="nav-item"><a href="reading.html" class="nav-link active">Чтение</a></li>
+                        <li class="nav-item"><a href="chapters.html" class="nav-link">Главы</a></li>
+                        <li class="nav-item"><a href="encyclopedia.html" class="nav-link">Энциклопедия</a></li>
+                        <li class="nav-item"><a href="faq.html" class="nav-link">FAQ</a></li>
+                        <li class="nav-item"><a href="contacts.html" class="nav-link">Контакты</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Мобильное меню -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основное содержимое -->
+    <main class="main">
+        <div class="container reading-container">
+            <!-- Боковая панель с навигацией по главам -->
+            <aside class="reading-sidebar">
+                <h2 class="sidebar-title">Навигация по главам</h2>
+                
+                <div class="book-info" style="margin-bottom: 25px; padding: 15px; background: #252525; border-radius: 6px;">
+                    <div style="color: #a0a0a0; font-size: 0.9rem; margin-bottom: 5px;">Книга:</div>
+                    <div style="color: #e0e0e0; font-weight: 600;">The Adventures of an Engineer</div>
+                </div>
+                
+                <div class="chapters-list">
+                    <h3 style="margin-bottom: 15px; color: #e0e0e0; font-size: 1.1rem;">Список глав:</h3>
+                    <ul class="chapter-list" id="chapterList">
+                        <!-- Главы будут загружены через JavaScript -->
+                    </ul>
+                </div>
+                
+                <div class="reading-progress" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #444;">
+                    <h3 style="margin-bottom: 15px; color: #e0e0e0; font-size: 1.1rem;">Ваш прогресс:</h3>
+                    <div style="margin-bottom: 10px;">
+                        <span style="color: #a0a0a0;">Прочитано глав:</span>
+                        <span id="readChaptersCount" style="color: #4cc9f0; font-weight: 600; margin-left: 10px;">0</span>
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <span style="color: #a0a0a0;">Текущая позиция:</span>
+                        <div id="currentPosition" style="color: #e0e0e0; margin-top: 5px; font-size: 0.9rem;">Не выбрана</div>
+                    </div>
+                    <button id="markAsRead" class="btn btn-secondary btn-small" style="width: 100%;">Отметить главу как прочитанную</button>
+                    <button id="resetProgress" class="btn btn-small" style="width: 100%; margin-top: 10px; background: #2d2d2d; border: 1px solid #444;">Сбросить прогресс</button>
+                </div>
+            </aside>
+            
+            <!-- Основная область чтения -->
+            <article class="reading-content">
+                <div class="book-header">
+                    <h1 class="book-title" id="bookTitle">Загрузка книги...</h1>
+                    <div class="book-meta">
+                        <span class="volume-info" id="volumeInfo">The Adventures of an Engineer</span>
+                        <span class="chapter-info" id="chapterInfo">Глава не выбрана</span>
+                        <span class="reading-time" id="readingTime" style="color: #a0a0a0;">~ 0 мин чтения</span>
+                    </div>
+                </div>
+                
+                <div class="book-text" id="bookText">
+                    <div style="text-align: center; padding: 60px 0; color: #a0a0a0;">
+                        <div class="spinner"></div>
+                        <p style="margin-top: 20px;">Загрузка книги...</p>
+                    </div>
+                </div>
+                
+                <div class="reading-navigation">
+                    <button class="nav-btn" id="prevChapter" disabled>
+                        <span style="margin-right: 10px;">←</span>
+                        Предыдущая глава
+                    </button>
+                    
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <span style="color: #a0a0a0; font-size: 0.9rem;">Шрифт:</span>
+                        <button id="fontSizeDown" class="btn btn-small" style="background: #2d2d2d; border: 1px solid #444;">A-</button>
+                        <button id="fontSizeReset" class="btn btn-small" style="background: #2d2d2d; border: 1px solid #444;">A</button>
+                        <button id="fontSizeUp" class="btn btn-small" style="background: #2d2d2d; border: 1px solid #444;">A+</button>
+                    </div>
+                    
+                    <button class="nav-btn" id="nextChapter" disabled>
+                        Следующая глава
+                        <span style="margin-left: 10px;">→</span>
+                    </button>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Подвал -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html" class="logo">
+                        <div class="logo-img">⚙️</div>
+                        <span class="logo-text">The Adventures of an Engineer</span>
+                    </a>
+                    <p class="footer-text">Онлайн-платформа для чтения книги о технических открытиях и человеческих свершениях</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h3 class="footer-title">Навигация</h3>
+                    <ul class="footer-list">
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="about-book.html">О книге</a></li>
+                        <li><a href="reading.html">Чтение</a></li>
+                        <li><a href="chapters.html">Главы</a></li>
+                        <li><a href="encyclopedia.html">Энциклопедия</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contacts.html">Контакты</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-info">
+                    <h3 class="footer-title">Информация</h3>
+                    <p>Книга доступна для бесплатного чтения</p>
+                    <p>Проект является некоммерческим</p>
+                    <p>Тёмная тема для комфортного чтения</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+    <p>© <span id="currentYear">2023</span> The Adventures of an Engineer. Все права защищены Joly Jayson.</p>
+</div>
+        </div>
+    </footer>
+
+    <script>
+        // Конфигурация
+        const BOOK_FILE = 'book/the-adventures-of-an-engineer.txt';
+        
+        // Глобальные переменные
+        let bookChapters = [];
+        let currentFontSize = 100;
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Загрузка текущего года в футер
+            const yearSpans = document.querySelectorAll('#currentYear');
+            yearSpans.forEach(span => {
+                span.textContent = new Date().getFullYear();
+            });
+            
+            // Загрузка книги
+            await loadBook();
+            
+            // Инициализация интерфейса
+            initializeInterface();
+            
+            // Настройка обработчиков событий
+            setupEventHandlers();
+            
+            // Загрузка сохранённой главы
+            loadSavedChapter();
+        });
+        
+        // Функция загрузки книги
+        async function loadBook() {
+            try {
+                // Показываем индикатор загрузки
+                document.getElementById('bookText').innerHTML = `
+                    <div style="text-align: center; padding: 50px 0;">
+                        <div class="spinner"></div>
+                        <p style="margin-top: 20px; color: #a0a0a0;">Загрузка книги...</p>
+                    </div>
+                `;
+                
+                // Загружаем файл с книгой
+                const response = await fetch(BOOK_FILE);
+                
+                if (!response.ok) {
+                    throw new Error(`Ошибка загрузки: ${response.status} ${response.statusText}`);
+                }
+                
+                const bookText = await response.text();
+                
+                // Разбираем текст на главы
+                bookChapters = parseChapters(bookText);
+                
+                if (bookChapters.length === 0) {
+                    throw new Error('Не удалось найти главы в файле. Проверьте формат.');
+                }
+                
+                console.log(`Загружено глав: ${bookChapters.length}`);
+                
+            } catch (error) {
+                console.error('Ошибка загрузки книги:', error);
+                showError(`Не удалось загрузить книгу: ${error.message}<br><br>Убедитесь, что файл <strong>${BOOK_FILE}</strong> существует.`);
+            }
+        }
+        
+        // Функция разбора текста на главы
+        function parseChapters(text) {
+            const chapters = [];
+            
+            // Паттерны для поиска глав
+            const patterns = [
+                /^## Глава (\d+):?\s*(.*?)$/gm,      // ## Глава 1: Название
+                /^## Chapter (\d+):?\s*(.*?)$/gm,    // ## Chapter 1: Title
+                /^Глава (\d+)[:.\s]*(.*?)$/gm,       // Глава 1: Название
+                /^Chapter (\d+)[:.\s]*(.*?)$/gm,     // Chapter 1: Title
+                /^# (\d+)\.\s*(.*?)$/gm,             // # 1. Название
+            ];
+            
+            let matches = [];
+            let usedPattern = null;
+            
+            // Пробуем разные паттерны
+            for (const pattern of patterns) {
+                pattern.lastIndex = 0; // Сбрасываем индекс
+                const patternMatches = [...text.matchAll(pattern)];
+                
+                if (patternMatches.length > 0) {
+                    matches = patternMatches;
+                    usedPattern = pattern;
+                    break;
+                }
+            }
+            
+            if (matches.length === 0) {
+                // Если не нашли стандартные заголовки, создаем одну главу
+                return [{
+                    number: 1,
+                    title: 'Книга',
+                    content: text.trim(),
+                    start: 0
+                }];
+            }
+            
+            // Создаем объекты глав
+            for (let i = 0; i < matches.length; i++) {
+                const match = matches[i];
+                const chapterNumber = parseInt(match[1]) || (i + 1);
+                const chapterTitle = match[2].trim() || `Глава ${chapterNumber}`;
+                const chapterStart = match.index + match[0].length;
+                
+                // Определяем конец главы (начало следующей или конец текста)
+                const chapterEnd = (i < matches.length - 1) 
+                    ? matches[i + 1].index 
+                    : text.length;
+                
+                const chapterContent = text.substring(chapterStart, chapterEnd).trim();
+                
+                chapters.push({
+                    number: chapterNumber,
+                    title: chapterTitle,
+                    content: chapterContent,
+                    start: chapterStart
+                });
+            }
+            
+            return chapters;
+        }
+        
+        // Функция инициализации интерфейса
+        function initializeInterface() {
+            // Заполняем список глав
+            populateChapterList();
+            
+            // Обновляем счетчик прочитанных глав
+            updateReadChaptersCount();
+            
+            // Настраиваем управление шрифтом
+            setupFontControls();
+        }
+        
+        // Функция заполнения списка глав
+        function populateChapterList() {
+            const chapterList = document.getElementById('chapterList');
+            
+            if (bookChapters.length === 0) {
+                chapterList.innerHTML = `
+                    <li style="color: #a0a0a0; padding: 20px; text-align: center;">
+                        Главы не найдены
+                    </li>
+                `;
+                return;
+            }
+            
+            chapterList.innerHTML = '';
+            
+            // Загружаем прогресс
+            const readChapters = JSON.parse(localStorage.getItem('bookflow_read_chapters') || '[]');
+            
+            bookChapters.forEach(chapter => {
+                const chapterKey = `1-${chapter.number}`;
+                const isRead = readChapters.includes(chapterKey);
+                
+                const li = document.createElement('li');
+                li.className = `chapter-item ${isRead ? 'read' : ''}`;
+                li.dataset.chapter = chapter.number;
+                li.innerHTML = `
+                    <span>Глава ${chapter.number}: ${chapter.title}</span>
+                    ${isRead ? '<span style="color: #4cc9f0;">✓</span>' : ''}
+                `;
+                
+                li.addEventListener('click', () => {
+                    loadChapter(chapter.number);
+                });
+                
+                chapterList.appendChild(li);
+            });
+        }
+        
+        // Функция загрузки главы
+        function loadChapter(chapterNumber) {
+            const chapter = bookChapters.find(ch => ch.number == chapterNumber);
+            
+            if (!chapter) {
+                showNotification('Глава не найдена', 'error');
+                return;
+            }
+            
+            // Сохраняем текущую позицию
+            localStorage.setItem('bookflow_last_chapter', chapterNumber);
+            
+            // Обновляем информацию о главе
+            document.getElementById('bookTitle').textContent = chapter.title;
+            document.getElementById('chapterInfo').textContent = `Глава ${chapter.number}`;
+            document.getElementById('currentPosition').textContent = `Глава ${chapter.number}: ${chapter.title}`;
+            
+            // Рассчитываем время чтения
+            const wordCount = countWords(chapter.content);
+            const readingTime = Math.ceil(wordCount / 200);
+            document.getElementById('readingTime').textContent = `~ ${readingTime} мин чтения`;
+            
+            // Форматируем и отображаем текст
+            const formattedText = formatChapterText(chapter.content);
+            document.getElementById('bookText').innerHTML = formattedText;
+            
+            // Применяем текущий размер шрифта
+            document.getElementById('bookText').style.fontSize = `${currentFontSize}%`;
+            
+            // Обновляем навигацию
+            updateNavigation(chapter.number);
+            
+            // Обновляем активную главу в списке
+            updateActiveChapter(chapter.number);
+            
+            // Прокручиваем к началу главы
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Показываем уведомление о загрузке
+            showNotification(`Загружена глава ${chapter.number}: ${chapter.title}`, 'success');
+        }
+        
+        // Функция подсчета слов
+        function countWords(text) {
+            return text.split(/\s+/).filter(word => word.length > 0).length;
+        }
+        
+        // Функция форматирования текста главы
+        function formatChapterText(text) {
+            // Разбиваем на абзацы
+            const paragraphs = text.split(/\n\s*\n/);
+            
+            // Форматируем каждый абзац
+            const formattedParagraphs = paragraphs.map(paragraph => {
+                paragraph = paragraph.trim();
+                if (!paragraph) return '';
+                
+                // Проверяем, является ли абзац подзаголовком
+                if (paragraph.match(/^[A-ZА-Я][^.!?]*[.:]$/) && paragraph.length < 100) {
+                    return `<h3>${paragraph}</h3>`;
+                }
+                
+                // Проверяем на выделение курсивом или жирным
+                paragraph = paragraph.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                paragraph = paragraph.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                
+                // Обычный абзац
+                return `<p>${paragraph}</p>`;
+            }).filter(p => p !== '');
+            
+            return formattedParagraphs.join('');
+        }
+        
+        // Функция обновления навигации
+        function updateNavigation(chapterNumber) {
+            const prevBtn = document.getElementById('prevChapter');
+            const nextBtn = document.getElementById('nextChapter');
+            
+            // Предыдущая глава
+            if (chapterNumber > 1) {
+                prevBtn.disabled = false;
+                prevBtn.onclick = () => loadChapter(chapterNumber - 1);
+            } else {
+                prevBtn.disabled = true;
+            }
+            
+            // Следующая глава
+            if (chapterNumber < bookChapters.length) {
+                nextBtn.disabled = false;
+                nextBtn.onclick = () => loadChapter(chapterNumber + 1);
+            } else {
+                nextBtn.disabled = true;
+            }
+        }
+        
+        // Функция обновления активной главы в списке
+        function updateActiveChapter(chapterNumber) {
+            document.querySelectorAll('.chapter-item').forEach(item => {
+                item.classList.remove('active');
+                
+                if (parseInt(item.dataset.chapter) === parseInt(chapterNumber)) {
+                    item.classList.add('active');
+                    
+                    // Прокручиваем к активной главе
+                    setTimeout(() => {
+                        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 300);
+                }
+            });
+        }
+        
+        // Функция обновления счетчика прочитанных глав
+        function updateReadChaptersCount() {
+            const readChapters = JSON.parse(localStorage.getItem('bookflow_read_chapters') || '[]');
+            document.getElementById('readChaptersCount').textContent = readChapters.length;
+        }
+        
+        // Функция настройки управления шрифтом
+        function setupFontControls() {
+            const fontSizeDown = document.getElementById('fontSizeDown');
+            const fontSizeReset = document.getElementById('fontSizeReset');
+            const fontSizeUp = document.getElementById('fontSizeUp');
+            
+            fontSizeDown.addEventListener('click', () => {
+                if (currentFontSize > 80) {
+                    currentFontSize -= 10;
+                    updateFontSize();
+                }
+            });
+            
+            fontSizeReset.addEventListener('click', () => {
+                currentFontSize = 100;
+                updateFontSize();
+            });
+            
+            fontSizeUp.addEventListener('click', () => {
+                if (currentFontSize < 150) {
+                    currentFontSize += 10;
+                    updateFontSize();
+                }
+            });
+        }
+        
+        // Функция обновления размера шрифта
+        function updateFontSize() {
+            document.getElementById('bookText').style.fontSize = `${currentFontSize}%`;
+            
+            // Сохраняем настройки
+            localStorage.setItem('bookflow_fontsize', currentFontSize);
+            
+            showNotification(`Размер шрифта: ${currentFontSize}%`, 'info');
+        }
+        
+        // Функция настройки обработчиков событий
+        function setupEventHandlers() {
+            // Кнопка "Отметить как прочитанную"
+            document.getElementById('markAsRead').addEventListener('click', () => {
+                const activeChapter = document.querySelector('.chapter-item.active');
+                if (!activeChapter) {
+                    showNotification('Сначала выберите главу', 'error');
+                    return;
+                }
+                
+                const chapterNum = activeChapter.dataset.chapter;
+                const chapterKey = `1-${chapterNum}`;
+                
+                // Добавляем в список прочитанных
+                let readChapters = JSON.parse(localStorage.getItem('bookflow_read_chapters') || '[]');
+                
+                if (!readChapters.includes(chapterKey)) {
+                    readChapters.push(chapterKey);
+                    localStorage.setItem('bookflow_read_chapters', JSON.stringify(readChapters));
+                    
+                    // Обновляем интерфейс
+                    activeChapter.classList.add('read');
+                    if (!activeChapter.querySelector('span:last-child').innerHTML.includes('✓')) {
+                        activeChapter.querySelector('span:last-child').innerHTML += ' <span style="color: #4cc9f0;">✓</span>';
+                    }
+                    
+                    // Обновляем счетчик
+                    updateReadChaptersCount();
+                    
+                    showNotification(`Глава ${chapterNum} отмечена как прочитанная!`, 'success');
+                } else {
+                    showNotification('Эта глава уже отмечена как прочитанная', 'info');
+                }
+            });
+            
+            // Кнопка сброса прогресса
+            document.getElementById('resetProgress').addEventListener('click', () => {
+                if (confirm('Вы уверены, что хотите сбросить весь прогресс? Все прочитанные главы будут отмечены как непрочитанные.')) {
+                    localStorage.removeItem('bookflow_read_chapters');
+                    localStorage.removeItem('bookflow_last_chapter');
+                    
+                    // Обновляем интерфейс
+                    document.querySelectorAll('.chapter-item.read').forEach(item => {
+                        item.classList.remove('read');
+                        const checkmark = item.querySelector('span:last-child');
+                        if (checkmark.innerHTML.includes('✓')) {
+                            checkmark.innerHTML = checkmark.innerHTML.replace(' <span style="color: #4cc9f0;">✓</span>', '');
+                        }
+                    });
+                    
+                    updateReadChaptersCount();
+                    showNotification('Прогресс сброшен', 'success');
+                }
+            });
+            
+            // Горячие клавиши
+            document.addEventListener('keydown', (e) => {
+                // Стрелка влево - предыдущая глава
+                if (e.key === 'ArrowLeft' && !document.getElementById('prevChapter').disabled) {
+                    e.preventDefault();
+                    document.getElementById('prevChapter').click();
+                }
+                
+                // Стрелка вправо - следующая глава
+                if (e.key === 'ArrowRight' && !document.getElementById('nextChapter').disabled) {
+                    e.preventDefault();
+                    document.getElementById('nextChapter').click();
+                }
+                
+                // Ctrl + Пробел - отметить как прочитанную
+                if (e.key === ' ' && e.ctrlKey) {
+                    e.preventDefault();
+                    document.getElementById('markAsRead').click();
+                }
+                
+                // Ctrl + + / - - изменение размера шрифта
+                if (e.ctrlKey && (e.key === '+' || e.key === '=')) {
+                    e.preventDefault();
+                    document.getElementById('fontSizeUp').click();
+                }
+                
+                if (e.ctrlKey && e.key === '-') {
+                    e.preventDefault();
+                    document.getElementById('fontSizeDown').click();
+                }
+                
+                // Ctrl + 0 - сброс размера шрифта
+                if (e.ctrlKey && e.key === '0') {
+                    e.preventDefault();
+                    document.getElementById('fontSizeReset').click();
+                }
+            });
+            
+            // Мобильное меню
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const nav = document.querySelector('.nav');
+            
+            if (mobileMenuBtn && nav) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    nav.classList.toggle('active');
+                    mobileMenuBtn.classList.toggle('active');
+                });
+            }
+            
+            // Закрытие мобильного меню при клике на ссылку
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        nav.classList.remove('active');
+                        mobileMenuBtn.classList.remove('active');
+                    }
+                });
+            });
+        }
+        
+        // Функция загрузки сохранённой главы
+        function loadSavedChapter() {
+            if (bookChapters.length === 0) {
+                // Книга не загружена
+                document.getElementById('bookText').innerHTML = `
+                    <div style="text-align: center; padding: 50px 0; color: #a0a0a0;">
+                        <h3>Книга не загружена</h3>
+                        <p>Попробуйте перезагрузить страницу</p>
+                        <button onclick="location.reload()" class="btn btn-primary" style="margin-top: 20px;">
+                            Перезагрузить
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Загружаем сохранённую главу
+            const savedChapter = localStorage.getItem('bookflow_last_chapter');
+            const chapterToLoad = bookChapters.find(ch => ch.number == savedChapter) || bookChapters[0];
+            
+            if (chapterToLoad) {
+                loadChapter(chapterToLoad.number);
+            }
+            
+            // Загружаем сохранённый размер шрифта
+            const savedFontSize = localStorage.getItem('bookflow_fontsize');
+            if (savedFontSize) {
+                currentFontSize = parseInt(savedFontSize);
+                updateFontSize();
+            }
+        }
+        
+        // Функция показа ошибки
+        function showError(message) {
+            document.getElementById('bookText').innerHTML = `
+                <div style="text-align: center; padding: 50px 0;">
+                    <h3 style="color: #ff6b6b;">Ошибка</h3>
+                    <div style="color: #a0a0a0; margin: 20px 0; line-height: 1.6;">
+                        ${message}
+                    </div>
+                    <div style="margin-top: 30px;">
+                        <button onclick="location.reload()" class="btn btn-primary" style="margin-right: 10px;">
+                            Перезагрузить
+                        </button>
+                        <button onclick="window.location.href='index.html'" class="btn btn-secondary">
+                            На главную
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Функция показа уведомления
+        function showNotification(message, type = 'info') {
+            // Удаляем старые уведомления
+            document.querySelectorAll('.notification').forEach(n => n.remove());
+            
+            // Создаем новое уведомление
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            
+            // Настраиваем цвет в зависимости от типа
+            if (type === 'error') {
+                notification.style.background = '#ff6b6b';
+            } else if (type === 'success') {
+                notification.style.background = '#4cc9f0';
+            } else if (type === 'info') {
+                notification.style.background = '#4361ee';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Удаляем уведомление через 3 секунды
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+        
+        // Экспортируем функции для отладки
+        window.debug = {
+            getChapters: () => bookChapters,
+            loadChapter: (num) => loadChapter(num),
+            resetProgress: () => {
+                localStorage.clear();
+                location.reload();
+            }
+        };
+    </script>
+</body>
+</html>

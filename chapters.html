@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Adventures of an Engineer - Список глав</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+    <style>
+        .chapters-page {
+            padding: 80px 0;
+        }
+        
+        .chapters-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .chapter-detailed-item {
+            background-color: var(--color-card);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            transition: transform var(--transition-speed);
+        }
+        
+        .chapter-detailed-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px var(--color-shadow);
+        }
+        
+        .chapter-number {
+            background: linear-gradient(135deg, var(--color-accent), #4361ee);
+            color: #121212;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .chapter-content {
+            flex: 1;
+        }
+        
+        .chapter-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--color-text);
+        }
+        
+        .chapter-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .read-badge {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--color-accent);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .chapter-description {
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        
+        .chapter-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 150px;
+        }
+        
+        .chapters-stats {
+            background: var(--color-card);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            border: 1px solid var(--color-border);
+        }
+        
+        .progress-bar-container {
+            background: var(--color-bg);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--color-accent), #4361ee);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 5px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            color: var(--color-text);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--color-text-secondary);
+        }
+        
+        .spinner {
+            border: 3px solid var(--color-border);
+            border-radius: 50%;
+            border-top: 3px solid var(--color-accent);
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+            .chapter-detailed-item {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .chapter-actions {
+                width: 100%;
+                flex-direction: row;
+                justify-content: flex-start;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="index.html" class="logo">
+                    <div class="logo-img">⚙️</div>
+                    <span class="logo-text">The Adventures of an Engineer</span>
+                </a>
+                
+                <!-- Навигация -->
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
+                        <li class="nav-item"><a href="about-book.html" class="nav-link">О книге</a></li>
+                        <li class="nav-item"><a href="reading.html" class="nav-link">Чтение</a></li>
+                        <li class="nav-item"><a href="chapters.html" class="nav-link active">Главы</a></li>
+                        <li class="nav-item"><a href="encyclopedia.html" class="nav-link">Энциклопедия</a></li>
+                        <li class="nav-item"><a href="faq.html" class="nav-link">FAQ</a></li>
+                        <li class="nav-item"><a href="contacts.html" class="nav-link">Контакты</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Мобильное меню -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основное содержимое -->
+    <main class="main chapters-page">
+        <div class="container">
+            <h1 class="section-title">Список глав</h1>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: 40px; color: #a0a0a0;">
+                Все главы книги "The Adventures of an Engineer"
+            </p>
+            
+            <div class="chapters-container">
+                <!-- Статистика прогресса -->
+                <div class="chapters-stats">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalChapters">0</div>
+                            <div class="stat-label">Всего глав</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="readChaptersCount">0</div>
+                            <div class="stat-label">Прочитано</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="progressPercentage">0%</div>
+                            <div class="stat-label">Прогресс</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="readingTime">0 ч</div>
+                            <div class="stat-label">Время чтения</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <div style="color: var(--color-text-secondary); margin-bottom: 10px; font-size: 0.9rem;">
+                            Прогресс чтения:
+                            <span id="progressText" style="color: var(--color-text); font-weight: 600;">0 из 0 глав</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="progressBar"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button id="markAllAsRead" class="btn btn-small" style="background: var(--color-bg); border: 1px solid var(--color-border);">
+                            Отметить все как прочитанные
+                        </button>
+                        <button id="resetProgress" class="btn btn-small" style="background: var(--color-bg); border: 1px solid var(--color-border);">
+                            Сбросить прогресс
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Список глав -->
+                <div class="chapters-list-detailed" id="chaptersList">
+                    <div class="empty-state" id="loadingState">
+                        <div class="spinner"></div>
+                        <p>Загрузка списка глав...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Подвал -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html" class="logo">
+                        <div class="logo-img">⚙️</div>
+                        <span class="logo-text">The Adventures of an Engineer</span>
+                    </a>
+                    <p class="footer-text">Онлайн-платформа для чтения книги о технических открытиях и человеческих свершениях</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h3 class="footer-title">Навигация</h3>
+                    <ul class="footer-list">
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="about-book.html">О книге</a></li>
+                        <li><a href="reading.html">Чтение</a></li>
+                        <li><a href="chapters.html">Главы</a></li>
+                        <li><a href="encyclopedia.html">Энциклопедия</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contacts.html">Контакты</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-info">
+                    <h3 class="footer-title">Информация</h3>
+                    <p>Книга доступна для бесплатного чтения</p>
+                    <p>Проект является некоммерческим</p>
+                    <p>Тёмная тема для комфортного чтения</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>© <span id="currentYear">2023</span> The Adventures of an Engineer. Все права защищены Joly Jayson.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Конфигурация
+        const BOOK_FILE = 'book/the-adventures-of-an-engineer.txt';
+        
+        // Глобальные переменные
+        let bookChapters = [];
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Загрузка текущего года в футер
+            const yearSpans = document.querySelectorAll('#currentYear');
+            yearSpans.forEach(span => {
+                span.textContent = new Date().getFullYear();
+            });
+            
+            // Загрузка книги и отображение глав
+            await loadAndDisplayChapters();
+            
+            // Настройка обработчиков событий
+            setupEventHandlers();
+        });
+        
+        // Функция загрузки и отображения глав
+        async function loadAndDisplayChapters() {
+            try {
+                // Показываем состояние загрузки
+                showLoadingState();
+                
+                // Загружаем файл с книгой
+                const response = await fetch(BOOK_FILE);
+                
+                if (!response.ok) {
+                    throw new Error(`Ошибка загрузки: ${response.status} ${response.statusText}`);
+                }
+                
+                const bookText = await response.text();
+                
+                // Разбираем текст на главы
+                bookChapters = parseChapters(bookText);
+                
+                if (bookChapters.length === 0) {
+                    throw new Error('Не удалось найти главы в файле. Проверьте формат.');
+                }
+                
+                // Отображаем список глав
+                displayChaptersList();
+                
+                // Обновляем статистику
+                updateStatistics();
+                
+            } catch (error) {
+                console.error('Ошибка загрузки глав:', error);
+                showErrorState(`Не удалось загрузить список глав: ${error.message}`);
+            }
+        }
+        
+        // Функция разбора текста на главы
+        function parseChapters(text) {
+            const chapters = [];
+            
+            // Паттерны для поиска глав
+            const patterns = [
+                /^## Глава (\d+):?\s*(.*?)$/gm,      // ## Глава 1: Название
+                /^## Chapter (\d+):?\s*(.*?)$/gm,    // ## Chapter 1: Title
+                /^Глава (\d+)[:.\s]*(.*?)$/gm,       // Глава 1: Название
+                /^Chapter (\d+)[:.\s]*(.*?)$/gm,     // Chapter 1: Title
+                /^# (\d+)\.\s*(.*?)$/gm,             // # 1. Название
+            ];
+            
+            let matches = [];
+            let usedPattern = null;
+            
+            // Пробуем разные паттерны
+            for (const pattern of patterns) {
+                pattern.lastIndex = 0; // Сбрасываем индекс
+                const patternMatches = [...text.matchAll(pattern)];
+                
+                if (patternMatches.length > 0) {
+                    matches = patternMatches;
+                    usedPattern = pattern;
+                    break;
+                }
+            }
+            
+            if (matches.length === 0) {
+                // Если не нашли стандартные заголовки, создаем одну главу
+                return [{
+                    number: 1,
+                    title: 'Книга',
+                    content: text.trim(),
+                    start: 0
+                }];
+            }
+            
+            // Создаем объекты глав
+            for (let i = 0; i < matches.length; i++) {
+                const match = matches[i];
+                const chapterNumber = parseInt(match[1]) || (i + 1);
+                const chapterTitle = match[2].trim() || `Глава ${chapterNumber}`;
+                const chapterStart = match.index + match[0].length;
+                
+                // Определяем конец главы (начало следующей или конец текста)
+                const chapterEnd = (i < matches.length - 1) 
+                    ? matches[i + 1].index 
+                    : text.length;
+                
+                const chapterContent = text.substring(chapterStart, chapterEnd).trim();
+                
+                chapters.push({
+                    number: chapterNumber,
+                    title: chapterTitle,
+                    content: chapterContent,
+                    start: chapterStart
+                });
+            }
+            
+            return chapters;
+        }
+        
+        // Функция отображения списка глав
+        function displayChaptersList() {
+            const chaptersList = document.getElementById('chaptersList');
+            
+            if (bookChapters.length === 0) {
+                chaptersList.innerHTML = `
+                    <div class="empty-state">
+                        <p>Главы не найдены</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Загружаем прогресс
+            const readChapters = JSON.parse(localStorage.getItem('bookflow_read_chapters') || '[]');
+            
+            let chaptersHTML = '';
+            
+            bookChapters.forEach(chapter => {
+                const chapterKey = `1-${chapter.number}`;
+                const isRead = readChapters.includes(chapterKey);
+                
+                // Подсчитываем слова и время чтения
+                const wordCount = countWords(chapter.content);
+                const readingTime = Math.ceil(wordCount / 200); // 200 слов в минуту
+                const preview = getChapterPreview(chapter.content);
+                
+                chaptersHTML += `
+                    <div class="chapter-detailed-item" data-chapter="${chapter.number}">
+                        <div class="chapter-number">${chapter.number}</div>
+                        <div class="chapter-content">
+                            <h3 class="chapter-title">Глава ${chapter.number}: ${chapter.title}</h3>
+                            <div class="chapter-meta">
+                                <span class="meta-item">⏱️ ~${readingTime} мин</span>
+                                <span class="meta-item">📖 ~${wordCount} слов</span>
+                                ${isRead ? '<span class="read-badge">✓ Прочитано</span>' : ''}
+                            </div>
+                            <p class="chapter-description">${preview}</p>
+                        </div>
+                        <div class="chapter-actions">
+                            <a href="reading.html?chapter=${chapter.number}" class="btn btn-small ${isRead ? 'btn-secondary' : 'btn-primary'}">
+                                ${isRead ? 'Перечитать' : 'Читать'}
+                            </a>
+                            ${!isRead ? `
+                                <button class="btn btn-small mark-chapter-read" data-chapter="${chapter.number}" style="background: var(--color-bg); border: 1px solid var(--color-border);">
+                                    Отметить прочитанной
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            chaptersList.innerHTML = chaptersHTML;
+            
+            // Добавляем обработчики для кнопок "Отметить прочитанной"
+            document.querySelectorAll('.mark-chapter-read').forEach(button => {
+                button.addEventListener('click', function() {
+                    const chapterNum = this.dataset.chapter;
+                    markChapterAsRead(chapterNum);
+                });
+            });
+        }
+        
+        // Функция подсчета слов
+        function countWords(text) {
+            return text.split(/\s+/).filter(word => word.length > 0).length;
+        }
+        
+        // Функция получения превью главы
+        function getChapterPreview(text) {
+            const firstParagraph = text.split(/\n\s*\n/)[0];
+            if (!firstParagraph) return 'Начало главы...';
+            
+            // Очищаем от лишних пробелов
+            let preview = firstParagraph.trim();
+            
+            // Обрезаем до 150 символов
+            if (preview.length > 150) {
+                preview = preview.substring(0, 150) + '...';
+            }
+            
+            return preview;
+        }
+        
+        // Функция обновления статистики
+        function updateStatistics() {
+            const totalChapters = bookChapters.length;
+            const readChapters = JSON.parse(localStorage.getItem('bookflow_read_chapters') || '[]');
+            const readCount = readChapters.length;
+            const percentage = totalChapters > 0 ? Math.round((readCount / totalChapters) * 100) : 0;
+            
+            // Общее время чтения (в минутах)
+            let totalReadingTime = 0;
+            bookChapters.forEach(chapter => {
+                totalReadingTime += Math.ceil(countWords(chapter.content) / 200);
+            });
+            const totalHours = Math.floor(totalReadingTime / 60);
+            const totalMinutes = totalReadingTime % 60;
+            const readingTimeText = totalHours > 0 ? `${totalHours} ч ${totalMinutes} мин` : `${totalMinutes} мин`;
+            
+            // Обновляем элементы статистики
+            document.getElementById('totalChapters').textContent = totalChapters;
+            document.getElementById('readChaptersCount').textContent = readCount;
+            document.getElementById('progressPercentage').textContent = percentage + '%';
+            document.getElementById('readingTime').textContent = readingTimeText;
+            document.getElementById('progressText').textContent = `${readCount} из ${totalChapters} глав`;
+            document.getElementById('progressBar').style.width = percentage + '%';
+        }
+        
+        // Функция отметки главы как прочитанной
+        function markChapterAsRead(chapterNum) {
+            const chapterKey = `1-${chapterNum}`;
+            
+            // Добавляем в список прочитанных
+            let readChapters = JSON.parse(localStorage.getItem('bookflow_read_chapters') || '[]');
+            
+            if (!readChapters.includes(chapterKey)) {
+                readChapters.push(chapterKey);
+                localStorage.setItem('bookflow_read_chapters', JSON.stringify(readChapters));
+                
+                // Обновляем интерфейс
+                const chapterElement = document.querySelector(`.chapter-detailed-item[data-chapter="${chapterNum}"]`);
+                if (chapterElement) {
+                    // Добавляем бейдж
+                    const metaElement = chapterElement.querySelector('.chapter-meta');
+                    if (!metaElement.querySelector('.read-badge')) {
+                        const badge = document.createElement('span');
+                        badge.className = 'read-badge';
+                        badge.textContent = '✓ Прочитано';
+                        metaElement.appendChild(badge);
+                    }
+                    
+                    // Меняем кнопку
+                    const actionsElement = chapterElement.querySelector('.chapter-actions');
+                    const readButton = actionsElement.querySelector('.mark-chapter-read');
+                    if (readButton) {
+                        readButton.remove();
+                    }
+                    
+                    const mainButton = actionsElement.querySelector('.btn-small');
+                    if (mainButton) {
+                        mainButton.className = 'btn btn-small btn-secondary';
+                        mainButton.textContent = 'Перечитать';
+                    }
+                }
+                
+                // Обновляем статистику
+                updateStatistics();
+                
+                // Показываем уведомление
+                showNotification(`Глава ${chapterNum} отмечена как прочитанная!`, 'success');
+            } else {
+                showNotification('Эта глава уже отмечена как прочитанная', 'info');
+            }
+        }
+        
+        // Функция настройки обработчиков событий
+        function setupEventHandlers() {
+            // Кнопка "Отметить все как прочитанные"
+            document.getElementById('markAllAsRead').addEventListener('click', () => {
+                if (confirm('Отметить все главы как прочитанные?')) {
+                    const readChapters = [];
+                    bookChapters.forEach(chapter => {
+                        readChapters.push(`1-${chapter.number}`);
+                    });
+                    
+                    localStorage.setItem('bookflow_read_chapters', JSON.stringify(readChapters));
+                    
+                    // Перезагружаем список глав
+                    displayChaptersList();
+                    updateStatistics();
+                    
+                    showNotification('Все главы отмечены как прочитанные!', 'success');
+                }
+            });
+            
+            // Кнопка сброса прогресса
+            document.getElementById('resetProgress').addEventListener('click', () => {
+                if (confirm('Вы уверены, что хотите сбросить весь прогресс? Все прочитанные главы будут отмечены как непрочитанные.')) {
+                    localStorage.removeItem('bookflow_read_chapters');
+                    
+                    // Перезагружаем список глав
+                    displayChaptersList();
+                    updateStatistics();
+                    
+                    showNotification('Прогресс сброшен', 'success');
+                }
+            });
+            
+            // Мобильное меню
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const nav = document.querySelector('.nav');
+            
+            if (mobileMenuBtn && nav) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    nav.classList.toggle('active');
+                    mobileMenuBtn.classList.toggle('active');
+                });
+            }
+            
+            // Закрытие мобильного меню при клике на ссылку
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        nav.classList.remove('active');
+                        mobileMenuBtn.classList.remove('active');
+                    }
+                });
+            });
+        }
+        
+        // Функция показа состояния загрузки
+        function showLoadingState() {
+            document.getElementById('chaptersList').innerHTML = `
+                <div class="empty-state" id="loadingState">
+                    <div class="spinner"></div>
+                    <p>Загрузка списка глав...</p>
+                </div>
+            `;
+        }
+        
+        // Функция показа состояния ошибки
+        function showErrorState(message) {
+            document.getElementById('chaptersList').innerHTML = `
+                <div class="empty-state">
+                    <p style="color: #ff6b6b; margin-bottom: 15px;">Ошибка</p>
+                    <p style="margin-bottom: 20px;">${message}</p>
+                    <button onclick="location.reload()" class="btn btn-primary">
+                        Перезагрузить страницу
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Функция показа уведомления
+        function showNotification(message, type = 'info') {
+            // Удаляем старые уведомления
+            document.querySelectorAll('.notification').forEach(n => n.remove());
+            
+            // Создаем новое уведомление
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                border-radius: 8px;
+                z-index: 10000;
+                font-weight: 600;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+                animation: slideIn 0.3s ease;
+            `;
+            
+            // Настраиваем цвет в зависимости от типа
+            if (type === 'error') {
+                notification.style.background = '#ff6b6b';
+                notification.style.color = '#121212';
+            } else if (type === 'success') {
+                notification.style.background = '#4cc9f0';
+                notification.style.color = '#121212';
+            } else if (type === 'info') {
+                notification.style.background = '#4361ee';
+                notification.style.color = '#fff';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Добавляем стили для анимации
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            // Удаляем уведомление через 3 секунды
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

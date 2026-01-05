@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Adventures of an Engineer - Частые вопросы</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚙️</text></svg>">
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="index.html" class="logo">
+                    <div class="logo-img">⚙️</div>
+                    <span class="logo-text">The Adventures of an Engineer</span>
+                </a>
+                
+                <!-- Навигация -->
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li class="nav-item"><a href="index.html" class="nav-link">Главная</a></li>
+                        <li class="nav-item"><a href="about-book.html" class="nav-link">О книге</a></li>
+                        <li class="nav-item"><a href="reading.html" class="nav-link">Чтение</a></li>
+                        <li class="nav-item"><a href="chapters.html" class="nav-link">Главы</a></li>
+                        <li class="nav-item"><a href="encyclopedia.html" class="nav-link">Энциклопедия</a></li>
+                        <li class="nav-item"><a href="faq.html" class="nav-link active">FAQ</a></li>
+                        <li class="nav-item"><a href="contacts.html" class="nav-link">Контакты</a></li>
+                    </ul>
+                </nav>
+                
+                <!-- Мобильное меню -->
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основное содержимое -->
+    <main class="main faq-page">
+        <div class="container">
+            <h1 class="section-title">Частые вопросы</h1>
+            <p class="section-subtitle" style="text-align: center; margin-bottom: 50px; color: #a0a0a0;">
+                Ответы на вопросы о книге "The Adventures of an Engineer"
+            </p>
+            
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        О чём книга "The Adventures of an Engineer"?
+                    </div>
+                    <div class="faq-answer">
+                        <p>Книга рассказывает историю молодого инженера, который проходит путь от студента до признанного специалиста. В сюжете сочетаются технические детали инженерных проектов с человеческими драмами, моральными выборами и социальными последствиями технологического прогресса.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Сколько глав в книге?
+                    </div>
+                    <div class="faq-answer">
+                        <p>Книга состоит из 24 глав, каждая из которых представляет собой законченный эпизод в жизни главного героя. Общий объём текста составляет примерно 150 000 слов.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Нужно ли техническое образование для понимания книги?
+                    </div>
+                    <div class="faq-answer">
+                        <p>Нет, книга написана таким образом, чтобы быть понятной широкому кругу читателей. Все технические термины и процессы объясняются доступным языком. Книга будет интересна как инженерам, так и людям без технического образования.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Как работает сохранение прогресса чтения?
+                    </div>
+                    <div class="faq-answer">
+                        <p>Сайт автоматически сохраняет вашу последнюю позицию чтения в локальном хранилище браузера. При следующем посещении вы сможете продолжить чтение с того же места. Прогресс также сохраняется при переходе между главами.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Можно ли читать книгу офлайн?
+                    </div>
+                    <div class="faq-answer">
+                        <p>Да, после первоначальной загрузки сайта и текста книги вы можете читать без подключения к интернету. Все данные кэшируются вашим браузером. Однако для первого посещения сайта потребуется интернет-соединение.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Как отметить главу как прочитанную?
+                    </div>
+                    <div class="faq-answer">
+                        <p>На странице чтения и на странице со списком глав есть кнопка "Отметить как прочитанную". Также вы можете использовать горячие клавиши Ctrl+Пробел во время чтения для быстрой отметки главы.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Можно ли изменить размер шрифта?
+                    </div>
+                    <div class="faq-answer">
+                        <p>Да, на странице чтения есть кнопки для увеличения, уменьшения и сброса размера шрифта. Также вы можете использовать стандартные функции браузера для изменения масштаба страницы (Ctrl + колесико мыши или Ctrl + +/-).</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Почему выбрана тёмная тема для сайта?
+                    </div>
+                    <div class="faq-answer">
+                        <p>Тёмная тема снижает нагрузку на глаза при длительном чтении, особенно в вечернее и ночное время. Это делает процесс чтения более комфортным и уменьшает утомляемость глаз.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Кто автор книги?
+                    </div>
+                    <div class="faq-answer">
+                        <p>Автор книги — профессиональный инженер с многолетним опытом работы в различных отраслях. Книга основана на личном опыте и наблюдениях, а также на консультациях с коллегами из разных инженерных специальностей.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Будет ли продолжение книги?
+                    </div>
+                    <div class="faq-answer">
+                        <p>В настоящее время книга является завершённым произведением. Однако автор рассматривает возможность создания продолжения или других произведений на схожую тематику. Следите за обновлениями на сайте.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Подвал -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html" class="logo">
+                        <div class="logo-img">⚙️</div>
+                        <span class="logo-text">The Adventures of an Engineer</span>
+                    </a>
+                    <p class="footer-text">Онлайн-платформа для чтения книги о технических открытиях и человеческих свершениях</p>
+                </div>
+                
+                <div class="footer-links">
+                    <h3 class="footer-title">Навигация</h3>
+                    <ul class="footer-list">
+                        <li><a href="index.html">Главная</a></li>
+                        <li><a href="about-book.html">О книге</a></li>
+                        <li><a href="reading.html">Чтение</a></li>
+                        <li><a href="chapters.html">Главы</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="contacts.html">Контакты</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-info">
+                    <h3 class="footer-title">Информация</h3>
+                    <p>Книга доступна для бесплатного чтения</p>
+                    <p>Проект является некоммерческим</p>
+                    <p>Тёмная тема для комфортного чтения</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+    <p>© <span id="currentYear">2023</span> The Adventures of an Engineer. Все права защищены Joly Jayson.</p>
+</div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
